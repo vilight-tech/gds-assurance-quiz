@@ -235,20 +235,26 @@ function startRain() {
   rain.raf = requestAnimationFrame(rainLoop);
 }
 
-// 단계가 오를수록 빨리, 자주, 여러 개가 한꺼번에 떨어진다
+// 단계가 오를수록 어려워지되, 후반에 폭주하지 않도록 바닥값에 수렴시킨다.
+// 초반 곡선은 그대로 두고 중반 이후 기울기만 완만하게 눕혔다.
 function spawnInterval() {
-  return Math.max(340, 1400 - (rain.level - 1) * 115);
+  return Math.round(600 + 800 * Math.pow(0.86, rain.level - 1));
 }
 
 function fallDuration() {
-  return Math.max(1700, 5600 - (rain.level - 1) * 420);
+  return Math.round(2400 + 3200 * Math.pow(0.88, rain.level - 1));
 }
 
-// 4단계부터는 한 번에 두 개, 8단계부터는 세 개까지 떨어질 수 있다
+// 동시 생성은 6단계부터 가끔 두 개, 12단계부터 아주 가끔 세 개까지만
 function spawnCount() {
-  if (rain.level >= 8) return Math.random() < 0.45 ? 3 : 2;
-  if (rain.level >= 4) return Math.random() < 0.55 ? 2 : 1;
+  if (rain.level >= 12 && Math.random() < 0.15) return 3;
+  if (rain.level >= 6 && Math.random() < Math.min(0.5, 0.15 + (rain.level - 6) * 0.05)) return 2;
   return 1;
+}
+
+// 화면에 동시에 떠 있을 수 있는 낱말 수 상한 (이게 폭주를 막는다)
+function maxOnScreen() {
+  return Math.min(7, 4 + Math.floor((rain.level - 1) / 4));
 }
 
 const LEVEL_UP_EVERY = 6;
@@ -277,9 +283,15 @@ function rainLoop(now) {
   if (!rain.running) return;
 
   if (now - rain.lastSpawn > spawnInterval()) {
-    const n = spawnCount();
-    for (let k = 0; k < n; k++) spawnWord(now + k * 90);
-    rain.lastSpawn = now;
+    const room = maxOnScreen() - rain.active.length;
+    if (room > 0) {
+      const n = Math.min(spawnCount(), room);
+      for (let k = 0; k < n; k++) spawnWord(now + k * 90);
+      rain.lastSpawn = now;
+    } else {
+      // 화면이 꽉 찼으면 조금 뒤에 다시 시도한다
+      rain.lastSpawn = now - spawnInterval() + 250;
+    }
   }
 
   const areaH = $('#rArea').clientHeight;
