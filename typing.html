@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>GDS 말씀 타자 연습</title>
+<meta name="description" content="순복음대구교회 GDS실 - 5대 확신 말씀으로 하는 타자 연습 게임" />
+<meta name="theme-color" content="#1b3a5c" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="typing.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌨️</text></svg>" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">GDS</span>
+    <span class="brand-text">말씀 타자 연습</span>
+  </div>
+  <a class="version link-plain" href="index.html">암송 퀴즈 →</a>
+</header>
+
+<main class="wrap">
+
+  <!-- 홈 -->
+  <section id="tHome">
+    <div class="card hero">
+      <h1>말씀 타자 연습</h1>
+      <p class="lead">외우려 하지 않아도 됩니다. 치다 보면 남습니다.</p>
+    </div>
+
+    <div class="mode-grid">
+      <button class="mode-card" data-mode="follow">
+        <span class="mode-emoji">⌨️</span>
+        <span class="mode-name">따라 치기</span>
+        <span class="mode-desc">말씀을 보면서 그대로 입력합니다. 타수와 정확도가 실시간으로 나옵니다.</span>
+      </button>
+      <button class="mode-card" data-mode="rain">
+        <span class="mode-emoji">🌧️</span>
+        <span class="mode-name">낱말 비 피하기</span>
+        <span class="mode-desc">말씀의 낱말이 떨어집니다. 바닥에 닿기 전에 쳐서 없애세요. 목숨 3개.</span>
+      </button>
+    </div>
+
+    <div class="card">
+      <p class="card-title">연습할 말씀 고르기</p>
+      <ul id="tVerseList" class="verse-list"></ul>
+      <p class="help">고르지 않으면 1번부터 순서대로 나옵니다.</p>
+    </div>
+
+    <div id="tBest" class="card history"></div>
+  </section>
+
+  <!-- 따라 치기 -->
+  <section id="tFollow" hidden>
+    <div class="hud">
+      <div class="hud-item"><span>타수</span><strong id="fSpeed">0</strong></div>
+      <div class="hud-item"><span>정확도</span><strong id="fAcc">100%</strong></div>
+      <div class="hud-item"><span>진행</span><strong id="fProg">1/1</strong></div>
+    </div>
+    <div class="card">
+      <p class="type-ref" id="fRef"></p>
+      <p class="type-target" id="fTarget"></p>
+      <textarea id="fInput" class="type-input" rows="3" autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false" placeholder="여기에 그대로 입력하세요"></textarea>
+      <div class="btn-row">
+        <button id="fQuit" class="btn ghost">그만하기</button>
+        <button id="fSkip" class="btn primary">건너뛰기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 낱말 비 -->
+  <section id="tRain" hidden>
+    <div class="hud">
+      <div class="hud-item"><span>점수</span><strong id="rScore">0</strong></div>
+      <div class="hud-item"><span>콤보</span><strong id="rCombo">0</strong></div>
+      <div class="hud-item"><span>단계</span><strong id="rLevel">1</strong></div>
+      <div class="hud-item"><span>목숨</span><strong id="rLives">♥♥♥</strong></div>
+    </div>
+    <p class="type-ref" id="rRef"></p>
+    <div id="rArea" class="play-area"></div>
+    <input id="rInput" class="type-input one-line" type="text" autocomplete="off" autocorrect="off"
+           autocapitalize="off" spellcheck="false" placeholder="낱말을 치고 Enter" />
+    <div class="btn-row">
+      <button id="rQuit" class="btn ghost">그만하기</button>
+    </div>
+  </section>
+
+  <!-- 결과 -->
+  <section id="tResult" hidden>
+    <div class="card">
+      <h2 class="quiz-title" id="resTitle">결과</h2>
+      <div id="resBody" class="summary"></div>
+      <p id="resNote" class="help"></p>
+      <div class="btn-row">
+        <button id="resHome" class="btn ghost">처음으로</button>
+        <button id="resAgain" class="btn primary">한 번 더</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">순복음대구교회 GDS실 · 개역개정 성경</footer>
+
+<script src="data.js"></script>
+<script src="typing.js"></script>
+</body>
+</html>
