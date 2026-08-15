@@ -238,11 +238,11 @@ function startRain() {
 // 단계가 오를수록 어려워지되, 후반에 폭주하지 않도록 바닥값에 수렴시킨다.
 // 초반 곡선은 그대로 두고 중반 이후 기울기만 완만하게 눕혔다.
 function spawnInterval() {
-  return Math.round(600 + 800 * Math.pow(0.86, rain.level - 1));
+  return Math.round(700 + 900 * Math.pow(0.88, rain.level - 1));
 }
 
 function fallDuration() {
-  return Math.round(2400 + 3200 * Math.pow(0.88, rain.level - 1));
+  return Math.round(3000 + 3800 * Math.pow(0.90, rain.level - 1));
 }
 
 // 동시 생성은 6단계부터 가끔 두 개, 12단계부터 아주 가끔 세 개까지만

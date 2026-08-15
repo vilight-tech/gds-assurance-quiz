@@ -82,7 +82,7 @@
 /* 낱말 비 */
 .play-area {
   position: relative;
-  height: 360px;
+  height: 470px;
   background: linear-gradient(180deg, #eef3fa 0%, #dde6f2 100%);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -123,7 +123,7 @@
 
 @media (max-width: 480px) {
   .mode-grid { grid-template-columns: 1fr; }
-  .play-area { height: 280px; }
+  .play-area { height: 380px; }
   .type-target { font-size: 17px; line-height: 2; }
   .hud-item strong { font-size: 17px; }
   .falling-word { font-size: 14px; padding: 4px 9px; }
