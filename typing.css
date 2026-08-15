@@ -51,7 +51,8 @@
   border-radius: 10px;
   font-size: 19px;
   line-height: 2.1;
-  word-break: keep-all;
+  white-space: pre-wrap;   /* 공백 보존 + 공백에서 줄바꿈 */
+  overflow-wrap: break-word;
   letter-spacing: .01em;
 }
 .ch { border-radius: 3px; }

@@ -100,7 +100,8 @@ function renderFollowTarget(typed) {
   const t = follow.target;
   let html = '';
   for (let i = 0; i < t.length; i++) {
-    const ch = t[i] === ' ' ? '&nbsp;' : esc(t[i]);
+    // 공백도 일반 공백 그대로 둔다 (CSS white-space: pre-wrap 이 보존하고, 여기서 줄이 바뀐다)
+    const ch = esc(t[i]);
     let cls = 'ch';
     if (i < typed.length) cls += typed[i] === t[i] ? ' ok' : ' wrong';
     else if (i === typed.length) cls += ' cur';
