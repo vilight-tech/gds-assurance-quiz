@@ -219,7 +219,7 @@ function startRain() {
   rain.active.forEach((a) => a.el.remove());
   rain.active = [];
   rain.score = 0; rain.combo = 0; rain.bestCombo = 0; rain.cleared = 0;
-  rain.level = 1; rain.lives = 3;
+  rain.level = 1; rain.bestLevel = 1; rain.lives = 3;
   rain.running = true;
   rain.lastSpawn = 0;
 
@@ -234,13 +234,23 @@ function startRain() {
   rain.raf = requestAnimationFrame(rainLoop);
 }
 
+// 단계가 오를수록 빨리, 자주, 여러 개가 한꺼번에 떨어진다
 function spawnInterval() {
-  return Math.max(900, 2200 - (rain.level - 1) * 130);
+  return Math.max(340, 1400 - (rain.level - 1) * 115);
 }
 
 function fallDuration() {
-  return Math.max(4200, 9000 - (rain.level - 1) * 450);
+  return Math.max(1700, 5600 - (rain.level - 1) * 420);
 }
+
+// 4단계부터는 한 번에 두 개, 8단계부터는 세 개까지 떨어질 수 있다
+function spawnCount() {
+  if (rain.level >= 8) return Math.random() < 0.45 ? 3 : 2;
+  if (rain.level >= 4) return Math.random() < 0.55 ? 2 : 1;
+  return 1;
+}
+
+const LEVEL_UP_EVERY = 6;
 
 function spawnWord(now) {
   const item = rain.words[rain.supplyIdx % rain.words.length];
@@ -266,7 +276,8 @@ function rainLoop(now) {
   if (!rain.running) return;
 
   if (now - rain.lastSpawn > spawnInterval()) {
-    spawnWord(now);
+    const n = spawnCount();
+    for (let k = 0; k < n; k++) spawnWord(now + k * 90);
     rain.lastSpawn = now;
   }
 
@@ -316,8 +327,11 @@ function submitRainWord() {
     rain.combo++;
     rain.bestCombo = Math.max(rain.bestCombo, rain.combo);
     rain.cleared++;
-    rain.score += 10 + strokes(a.text) + Math.min(rain.combo, 10) * 2;
-    if (rain.cleared % 10 === 0) rain.level++;
+    rain.score += (10 + strokes(a.text) + Math.min(rain.combo, 15) * 3) * rain.level;
+    if (rain.cleared % LEVEL_UP_EVERY === 0) {
+      rain.level++;
+      rain.bestLevel = rain.level;
+    }
   } else {
     rain.combo = 0;
   }
@@ -341,6 +355,7 @@ function endRain() {
   $('#resTitle').textContent = '게임 끝';
   $('#resBody').innerHTML = `
     <div class="sum-item"><span>점수</span><strong>${rain.score}</strong></div>
+    <div class="sum-item"><span>도달 단계</span><strong>${rain.bestLevel}</strong></div>
     <div class="sum-item"><span>최고 콤보</span><strong>${rain.bestCombo}</strong></div>
     <div class="sum-item"><span>친 낱말</span><strong>${rain.cleared}</strong></div>`;
   $('#resNote').textContent = rain.score >= best
